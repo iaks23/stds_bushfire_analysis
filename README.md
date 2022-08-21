@@ -1,5 +1,5 @@
-# Statistical Thinking For Data Science <img src="https://pixelartmaker-data-78746291193.nyc3.digitaloceanspaces.com/image/9f54815822d853b.png" 
-align="right" width="120"/>
+# Statistical Thinking For Data Science 
+<img src="https://pixelartmaker-data-78746291193.nyc3.digitaloceanspaces.com/image/9f54815822d853b.png" align="right" width="120"/>
 
 > Analysis performed by team Juliett on Prisoner Dataset 
 
