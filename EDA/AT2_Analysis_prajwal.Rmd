@@ -1,0 +1,118 @@
+---
+title: "Bushfire Visualization"
+author: "Prajwal"
+date: "`r Sys.Date()`"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+### Data Extraction
+
+```{r}
+# NRT data
+
+m6_nrt <- read.csv(file = "P:/UTS Academics/Sem-4/Statistical Thinking for Data Science/AT-2/Bushfire season data/fire_archive_M6_96619.csv")
+
+v1_nrt <- read.csv(file = "P:/UTS Academics/Sem-4/Statistical Thinking for Data Science/AT-2/Bushfire season data/fire_archive_V1_96617.csv")
+
+
+# Archive data
+
+m6_archive <- read.csv(file = "P:/UTS Academics/Sem-4/Statistical Thinking for Data Science/AT-2/Bushfire season data/fire_nrt_M6_96619.csv")
+
+v1_archive <- read.csv(file = "P:/UTS Academics/Sem-4/Statistical Thinking for Data Science/AT-2/Bushfire season data/fire_nrt_V1_96617.csv")
+```
+
+### Data Summary
+
+```{r}
+# Internal structure of MODIS dataset
+str(m6_nrt)
+
+# Archive data will have the same structure and is skipped for brevity in both datsets 
+```
+
+```{r}
+# Internal structure of VIIRS dataset
+str(v1_nrt)
+```
+
+```{r}
+# Shape of VIIRs
+dim(v1_nrt)
+
+# Shape of MODIS
+dim(m6_nrt)
+
+```
+
+
+### Data Cleaning
+
+```{r}
+v1_nrt$confidence[v1_nrt$confidence == "n"] <- 50
+v1_nrt$confidence[v1_nrt$confidence == "l"] <- 0
+v1_nrt$confidence[v1_nrt$confidence == "h"] <- 100
+head(v1_nrt)
+```
+
+```{r}
+v1_archive$confidence[v1_archive$confidence == "n"] <- 50
+v1_archive$confidence[v1_archive$confidence == "l"] <- 0
+v1_archive$confidence[v1_archive$confidence == "h"] <- 100
+head(v1_archive)
+```
+
+```{r}
+# Dropping non-requisite columns from the dataframe
+drops <- c("acq_date","acq_time","satellite","instrument","version","type", "daynight")
+df_m6_nrt <- m6_nrt[ , !(names(m6_nrt) %in% drops)]
+head(df_m6_nrt)
+```
+
+```{r}
+df_v1_nrt <- v1_nrt[ , !(names(v1_nrt) %in% drops)]
+head(df_v1_nrt)
+```
+
+
+## Descriptive Statistics
+
+```{r}
+library("ggplot2")                     
+library("GGally")    
+ggpairs(df_m6_nrt)    
+```
+
+```{r}
+library(psych)
+describe(df_m6_nrt)
+```
+
+### EDA
+
+```{r}
+# Concatenate
+df_m6_archive <- m6_archive[ , !(names(m6_archive) %in% drops)]
+
+m6_merged <- rbind(df_m6_nrt, df_m6_archive)
+dim(m6_merged)
+
+```
+```{r}
+names(m6_nrt)
+```
+
+```{r}
+library(dplyr)
+ggplot(m6_nrt, aes(x = frp, y = confidence)) + 
+  geom_point( )
+```
+```{r}
+ggplot(v1_nrt, aes(x = frp, y = confidence)) + 
+  geom_point( )
+```
+
